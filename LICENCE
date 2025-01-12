@@ -1,0 +1,63 @@
+# JSearch License Agreement
+
+## Copyright Notice
+
+JSearch - A Java-based Search Engine and Web Crawler  
+Copyright (c) 2025 ItssHello
+
+All rights reserved.
+
+## 1. Grant of License
+
+Subject to the terms and conditions of this License Agreement, the copyright holder grants you a limited, non-exclusive, non-transferable license to use, modify, and distribute the JSearch software (the "Software") solely for lawful purposes and in accordance with this License Agreement.
+
+## 2. Restrictions
+
+You may not:
+
+1. Use the Software for any illegal or unethical purposes.
+2. Reverse engineer, decompile, or disassemble the Software, except as expressly permitted by applicable law.
+3. Remove, alter, or obscure any proprietary notices, labels, or marks on the Software.
+4. Sub-license, rent, lease, or lend the Software without prior written consent from the copyright holder.
+
+## 3. Modifications and Derivative Works
+
+You may modify the Software to create derivative works, provided that:
+
+1. Any modified or derivative version of the Software must include a prominent notice stating that it has been modified, along with the date of modification.
+2. You must retain this License Agreement and all copyright notices in any modified or derivative version.
+3. You must properly attribute the original Software by providing a visible and functional link to the official GitHub repository: [https://github.com/itsshello/JSearch](https://github.com/itsshello/JSearch).
+
+## 4. Distribution
+
+You may distribute the Software, including modifications and derivative works, provided that:
+
+1. The source code is made available to recipients.
+2. This License Agreement is included with the distribution.
+3. Proper credit is given to the original Software by including a visible and functional link to the official GitHub repository: [https://github.com/itsshello/JSearch](https://github.com/itsshello/JSearch).
+4. No additional restrictions are imposed beyond those described in this License Agreement.
+
+## 5. Disclaimer of Warranty
+
+The Software is provided "as is," without warranty of any kind, express or implied, including but not limited to the warranties of merchantability, fitness for a particular purpose, and non-infringement. In no event shall the copyright holder or contributors be liable for any claim, damages, or other liability, whether in an action of contract, tort, or otherwise, arising from, out of, or in connection with the Software or the use or other dealings in the Software.
+
+## 6. Limitation of Liability
+
+To the maximum extent permitted by applicable law, in no event shall the copyright holder or contributors be liable for any special, incidental, indirect, or consequential damages whatsoever arising out of the use or inability to use the Software. The copyright holder is not liable for any misuse of the Software, including but not limited to violations of robots.txt directives, unauthorized access, or other unlawful activities performed using the Software.
+
+## 7. Termination
+
+This License Agreement is effective until terminated. Your rights under this License Agreement will terminate automatically without notice if you fail to comply with its terms. Upon termination, you must cease all use of the Software and destroy all copies in your possession or control.
+
+## 8. Governing Law
+
+This License Agreement shall be governed by and construed in accordance with the laws of a neutral jurisdiction, unless otherwise required by applicable law.
+
+## 9. Acknowledgments
+
+By using the Software, you acknowledge that you have read and understood this License Agreement and agree to be bound by its terms. You also acknowledge that the Software does not include functionality to respect robots.txt directives, and you are solely responsible for ensuring compliance with applicable laws and ethical guidelines.
+
+---
+
+For inquiries or additional permissions, please open an issue on the official GitHub repository: [https://github.com/itsshello/JSearch](https://github.com/itsshello/JSearch).
+
