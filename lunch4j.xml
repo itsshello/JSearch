@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<launch4jConfig>
+  <dontWrapJar>false</dontWrapJar>
+  <headerType>console</headerType>
+  <jar>JSearch.jar</jar> <!-- converted JAR file* -->
+  <outfile>JSearch.exe</outfile> <!-- EXE file path* -->
+  <errTitle></errTitle>
+  <cmdLine></cmdLine>
+  <chdir>.\</chdir>
+  <priority>normal</priority>
+  <downloadUrl></downloadUrl>
+  <supportUrl></supportUrl>
+  <stayAlive>true</stayAlive>
+  <restartOnCrash>false</restartOnCrash>
+  <manifest></manifest>
+  <icon>JSearch.ico</icon>   <!-- Ico file location* -->
+  <singleInstance>
+    <mutexName>JSearch.Itsshelloo</mutexName>
+    <windowTitle>JSearch</windowTitle>
+  </singleInstance>
+  <jre>
+    <path>JRE</path>        <!-- Java Runtime path* -->
+    <requiresJdk>true</requiresJdk>
+    <requires64Bit>false</requires64Bit>
+    <minVersion></minVersion>
+    <maxVersion></maxVersion>
+  </jre>
+  <versionInfo>
+    <fileVersion>1.0.0.1</fileVersion>
+    <txtFileVersion>1.0.0.10519</txtFileVersion>
+    <fileDescription>JSearch a Search Engine and a Webcrawler made from Java</fileDescription>
+    <copyright>See at GITHUB</copyright>   <!-- still yet to add -->
+    <productVersion>1.0.0.1</productVersion>
+    <txtProductVersion>1.0.0.10519</txtProductVersion>
+    <productName>JSearch</productName>
+    <companyName>Hello</companyName>
+    <internalName>JSearch</internalName>
+    <originalFilename>JSearch.exe</originalFilename>
+    <trademarks>&apos;coverimage: Flaticon.com&apos;. This cover has been designed using resources from Flaticon.com</trademarks>  <!-- The ico was from this website -->
+    <language>ENGLISH_US</language>
+  </versionInfo>
+  <messages>
+    <startupErr>An error occurred while starting the application.</startupErr>
+    <jreNotFoundErr>This application requires a Java Runtime Environment.
+Note: there sound be a &quot;JRE&quot; folder in the same folder as this exe</jreNotFoundErr>
+    <jreVersionErr>This application requires a Java Runtime Environment</jreVersionErr>
+    <launcherErr>The registry refers to a nonexistent Java Runtime Environment installation or the runtime is corrupted.</launcherErr>
+    <instanceAlreadyExistsMsg>An application instance is already running.</instanceAlreadyExistsMsg>
+  </messages>
+</launch4jConfig>
