@@ -1,12 +1,13 @@
 package dataset;
 
+import java.math.BigDecimal;
+import java.math.MathContext;
 import java.sql.*;
 import java.util.*;
 
 public class BrowseData {
     private static final String DB_URL = String.join("", "jdbc:sqlite:", Settings.getSetting("CRAWL_DATA_PATH")); // SQLite database
     private static int MAX_RESULTS;
-    
 
     public static void Search() {
         try {
@@ -51,7 +52,7 @@ public class BrowseData {
     public static void searchAndPrintBestMatches(String query) {
         String sql = "SELECT url, title, body FROM crawled_data";
         List<Document> documents = new ArrayList<>();
-        Map<String, Double> queryVector = createQueryVector(query);
+        Map<String, BigDecimal> queryVector = createQueryVector(query);
 
         try (Connection conn = DriverManager.getConnection(DB_URL);
              Statement stmt = conn.createStatement();
@@ -69,18 +70,23 @@ public class BrowseData {
             }
 
             // Rank documents by cosine similarity
-            Map<String, Double> scores = new HashMap<>();
+            Map<String, BigDecimal> scores = new HashMap<>();
             for (Document document : documents) {
-                double score = cosineSimilarity(queryVector, document.getTfIdfVector());
+                BigDecimal score = cosineSimilarity(queryVector, document.getTfIdfVector());
+
+                if (score.compareTo(BigDecimal.valueOf(Double.NaN)) == 0) {
+                    continue;
+                }
+
                 scores.put(document.getUrl(), score);
             }
 
             scores.entrySet().stream()
-                    .sorted((entry1, entry2) -> Double.compare(entry2.getValue(), entry1.getValue()))
+                    .sorted((entry1, entry2) -> entry2.getValue().compareTo(entry1.getValue()))
                     .limit(MAX_RESULTS) // top results
                     .forEach(entry -> {
                         String url = entry.getKey();
-                        double score = entry.getValue();
+                        BigDecimal score = entry.getValue();
                         System.out.println("\nURL: " + url);
                         System.out.println("Relevance Score: " + score);
                     });
@@ -90,41 +96,50 @@ public class BrowseData {
         }
     }
 
-    private static Map<String, Double> createQueryVector(String query) {
-        Map<String, Double> queryVector = new HashMap<>();
+    private static Map<String, BigDecimal> createQueryVector(String query) {
+        Map<String, BigDecimal> queryVector = new HashMap<>();
         String[] queryTerms = query.toLowerCase().split("\\s+");
 
         for (String term : queryTerms) {
-            queryVector.put(term, 1.0); // all terms are weighted equally (TF = 1)
+            queryVector.put(term, BigDecimal.ONE); // all terms are weighted equally (TF = 1)
         }
 
         return queryVector;
     }
 
-    private static double cosineSimilarity(Map<String, Double> queryVector, Map<String, Double> documentVector) {
-        double dotProduct = 0.0;
-        double queryMagnitude = 0.0;
-        double docMagnitude = 0.0;
+    private static BigDecimal cosineSimilarity(Map<String, BigDecimal> queryVector, Map<String, BigDecimal> documentVector) {
+        BigDecimal dotProduct = BigDecimal.ZERO;
+        BigDecimal queryMagnitude = BigDecimal.ZERO;
+        BigDecimal docMagnitude = BigDecimal.ZERO;
 
         // Calculate dot product and magnitudes
         for (String term : queryVector.keySet()) {
             if (documentVector.containsKey(term)) {
-                dotProduct += queryVector.get(term) * documentVector.get(term);
+                dotProduct = dotProduct.add(queryVector.get(term).multiply(documentVector.get(term)));
             }
         }
 
-        for (double value : queryVector.values()) {
-            queryMagnitude += value * value;
+        for (BigDecimal value : queryVector.values()) {
+            queryMagnitude = queryMagnitude.add(value.multiply(value));
         }
 
-        for (double value : documentVector.values()) {
-            docMagnitude += value * value;
+        for (BigDecimal value : documentVector.values()) {
+            docMagnitude = docMagnitude.add(value.multiply(value));
         }
 
-        queryMagnitude = Math.sqrt(queryMagnitude);
-        docMagnitude = Math.sqrt(docMagnitude);
+        queryMagnitude = sqrt(queryMagnitude);
+        docMagnitude = sqrt(docMagnitude);
 
-        return (dotProduct) / (queryMagnitude * docMagnitude);
+        if (queryMagnitude.equals(BigDecimal.ZERO) || docMagnitude.equals(BigDecimal.ZERO)) {
+            return BigDecimal.ZERO; // avoid dividing by zero
+        }
+
+        return dotProduct.divide(queryMagnitude.multiply(docMagnitude), MathContext.DECIMAL128);
+    }
+
+    // calculate square root
+    private static BigDecimal sqrt(BigDecimal value) {
+        return value.sqrt(new MathContext(16));
     }
 
     // document data and TF-IDF vector
@@ -132,7 +147,7 @@ public class BrowseData {
         private String url;
         private String title;
         private String body;
-        private Map<String, Double> tfIdfVector = new HashMap<>();
+        private Map<String, BigDecimal> tfIdfVector = new HashMap<>();
 
         public Document(String url, String title, String body) {
             this.url = url;
@@ -144,7 +159,7 @@ public class BrowseData {
             return url;
         }
 
-        public Map<String, Double> getTfIdfVector() {
+        public Map<String, BigDecimal> getTfIdfVector() {
             return tfIdfVector;
         }
 
@@ -162,9 +177,9 @@ public class BrowseData {
             // Calculate TF-IDF
             for (Map.Entry<String, Integer> entry : termFrequency.entrySet()) {
                 String term = entry.getKey();
-                double tf = entry.getValue() / (double) words.length;   // Term frequency
-                double idf = calculateIDF(term);                        // Inverse Document Frequency
-                tfIdfVector.put(term, tf * idf);
+                BigDecimal tf = BigDecimal.valueOf(entry.getValue()).divide(BigDecimal.valueOf(words.length), MathContext.DECIMAL128);   // Term frequency
+                BigDecimal idf = BigDecimal.valueOf(calculateIDF(term));                                                                 // Inverse Document Frequency
+                tfIdfVector.put(term, tf.multiply(idf));
             }
         }
 
@@ -177,9 +192,9 @@ public class BrowseData {
 
         private double getDocumentFrequency(String term) {
             /**
-             * This funtion needs alot of time and calculating that is near imposible for me.
+             * This function needs alot of time and calculating that is near imposible for me.
              * You can replace this with the actual document frequency calculation.
-             * But I will leave it blank beacuse my computer can't handle it.
+             * But I will leave it blank because my computer can't handle it.
              */
             return 100;
         }

@@ -1,4 +1,5 @@
 import crawler.CustomCrawler;
+import crawler.Tor;
 
 import dataset.Settings;
 import dataset.DatasetModule;
@@ -7,6 +8,7 @@ import dataset.BrowseData;
 public class App {
     public static void main(String[] args) {
         Settings.init();
+        DatasetModule.init();
         paseArgs(args);
     }
     public static void paseArgs(String[] args) {
@@ -58,6 +60,7 @@ public class App {
                 -l, --limit          Crawl limit [If Flag is -c, --crawl]
                 -eg, --engwiki       English Wikipedia only [If Flag is -c, --crawl]
                 -neg, --nengwiki     English Wikipedia only = False [If Flag is -c, --crawl]
+                -tor, --tor          Switchs to Tor Mode; This can crawl .onion websites  [InDev] [Tor must be running for this to work]
                 -sd, --seed          Seed URLs [If Flag is -c, --crawl] [must be comma-separated]
 
                 -sh, --show          Show settings [If Flag is -se, --settings]
@@ -72,6 +75,7 @@ public class App {
     private static void handleCrawl(String[] args) {
         int limit = Integer.parseInt(Settings.getSetting("CRAWL_LIMIT"));
         boolean engWikiOnly = (Settings.getSetting("CRAWL_ENG_WIKI_ONLY") == "yes" ? true : false); // default to English Wikipedia only
+        boolean torMode = false;
         String[] seedUrls = {};
 
         for (int i = 1; i < args.length; i++) {
@@ -92,6 +96,10 @@ public class App {
                 case "--nengwiki":
                     engWikiOnly = false;
                     break;
+                    case "--tor":
+                    case "-tor":
+                    torMode = true;
+                    break;
                 case "-sd":
                 case "--seed":
                     seedUrls = args[++i].split(",");
@@ -103,6 +111,15 @@ public class App {
         }
 
         DatasetModule.addSeedUrl(seedUrls);
+        if (torMode) {
+            System.out.println(
+                "Tor Mode : Make sure Tor is Running on the background [If its not running it will not crawl .onion links]" + "\n\n" +
+                "Crawling with limit: " + limit + ", \n" + 
+                "Seed URLs: " + String.join(", ", seedUrls));
+
+                Tor.crawl();
+            return;
+        }
         System.out.println(
             "\n\nCrawling with limit: " + limit + ", \n" + 
             "English Wikipedia only: " + engWikiOnly + ", \n" + 

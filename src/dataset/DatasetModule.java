@@ -23,7 +23,7 @@ public class DatasetModule {
 
     public static Set<String> getSeedUrls() {
         seedUrls.add("https://en.wikipedia.org/wiki/pancake");
-        // seedUrls.add("https://example.org");
+        // seedUrls.add("http://example.onion");
 
         return seedUrls;
     }
